@@ -1,125 +1,50 @@
-class Calculator{
-    constructor(previousOperandText, currentOperandText){
-        this.previousOperandText = previousOperandText;
-        this.currentOperandText = currentOperandText;
-        this.clear()
-    }
+let numStack = [];
 
-    clear(){
-        this.currentOperand = '';
-        this.previousOperand = '';
-        this.operation = undefined;
-    }
 
-    appendNumber(number){
-        if (number === '.' && this.currentOperand.includes('.')) return;
-
-        this.currentOperand = this.currentOperand.toString() + number.toString();
-    }
-
-    chooseOperation(operation){
-        if (this.currentOperand ==='') return
-
-        if (this.previousOperand !== '') {
-            this.calculate()
-        }
-
-        this.operation = operation;
-        this.previousOperand = this.currentOperand;
-        this.currentOperand = '';
-    }
-
-    updateDisplay(){
-        this.currentOperandText.innerText =
-        this.getDisplayNumber(this.currentOperand)
-
-        if(this.operation != null){
-            this.previousOperandText.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
-        } else {
-            this.previousOperandText.innerText = '';
-        }
-    }
-
-    calculate(){
-        let calculation;
-        const prev = parseFloat(this.previousOperand);
-        const current = parseFloat(this.currentOperand);
-        if(isNaN(prev) || isNaN(current)) return
-
-        switch (this.operation){
-            case '+':
-                calculation = prev + current;
-                break;
-            case '-':
-                calculation = prev - current;
-                break;
-            case '*':
-                calculation = prev * current;
-                break;
-            case '/':
-                calculation = prev / current;
-                break;
-            default:
-                return;
-        }
-        this.currentOperand = calculation;
-        this.operation = undefined;
-        this.previousOperand = '';
-    }
-
-    getDisplayNumber(number){
-        const stringNumber = number.toString()
-    const integerDigits = parseFloat(stringNumber.split('.')[0])
-    const decimalDigits = stringNumber.split('.')[1]
-        
-        let integerDisplay;
-
-        if(isNaN(integerDigits)){
-            integerDisplay =''
-        } else {
-            integerDisplay = integerDigits.toLocaleString('en', {
-                maximalFractionDigits: 0
-            })
-        }
-
-        if (decimalDigits != null){
-            return `${integerDisplay}.${decimalDigits}`
-        } else {
-            return integerDisplay
-        }
-    }
+function Push(){
+    let pushed = document.getElementById('num').value;
+    numStack.push(pushed);
+    console.log(numStack);
 }
 
-const numberBtns = document.querySelectorAll('[number]');
-const operationBtns = document.querySelectorAll('[operation]');
-const equalsBtn = document.querySelector('[equals]');
-const deleteBtn = document.querySelector('[delete]');
-const previousOperandText = document.querySelector('[previous-operand]');
-const currentOperandText = document.querySelector('[current-operand]');
 
-const calculator = new Calculator(previousOperandText, currentOperandText)
+function Addition(){
+    var x = numStack[0];
+    var y = numStack[1];
+    let inputPlus = parseInt(x) + parseInt(y);
+    
+    numStack.pop(numStack[0]);
+    numStack.pop(numStack[1]);
+    numStack.push(inputPlus);
+    console.log(numStack);
+        
+}
 
+function Subtraction(){
+    var x = numStack[0];
+    var y = numStack[1];
+    let inputMinus = parseInt(x) - parseInt(y);
+    numStack.push(inputMinus);
+    console.log(numStack);
+}
 
-numberBtns.forEach(button => {
-    button.addEventListener('click', () => {
-      calculator.appendNumber(button.innerText)
-      calculator.updateDisplay()
-    })
-  })
+function Multiplication(){
+    var x = numStack[0];
+    var y = numStack[1];
+    let inputMult = parseInt(x) * parseInt(y);
+    numStack.push(inputMult);
+    console.log(numStack);
+}
 
-operationBtns.forEach(button => {
-    button.addEventListener ('click', () =>{
-        calculator.chooseOperation(button.innerText);
-        calculator.updateDisplay();
-    })
-})
+function Division(){
+    var x = numStack[0];
+    var y = numStack[1];
+    let inputDiv = parseInt(x) / parseInt(y);
+    numStack.push(inputDiv);
+    console.log(numStack);
+}
 
-equalsBtn.addEventListener('click', button =>{
-    calculator.calculate();
-    calculator.updateDisplay();
-})
-
-deleteBtn.addEventListener('click', button =>{
-    calculator.clear();
-    calculator.updateDisplay();
-})
+function Print(){
+    
+    document.getElementById('outputBox').innerHTML = numStack[0];
+}
